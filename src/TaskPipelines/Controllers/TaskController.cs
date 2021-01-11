@@ -32,20 +32,20 @@ namespace TaskPipelines.Controllers
         }
 
         [HttpGet("pipeline/{pipelineId}")]
-        public async Task<IReadOnlyCollection<ExecutableTask>> OfPipelineAsync([FromQuery] long pipelineId)
+        public async Task<IReadOnlyCollection<ExecutableTask>> OfPipelineAsync(string pipelineId)
         {
             return await _context.Tasks.Find(x => x.PipelineId == pipelineId).ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ExecutableTask> GetAsync([FromQuery] long id)
+        public async Task<ExecutableTask> GetAsync(string id)
         {
             return await _context.Tasks.ByIdOrNullAsync(id)
                 ?? throw ResourceNotFoundException.FromEntity<ExecutableTask>(id);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync([FromQuery] long id)
+        public async Task<IActionResult> DeleteAsync(string id)
         {
             await _context.Tasks.DeleteOneAsync(x => x.Id == id);
             return Ok();

@@ -9,7 +9,7 @@ namespace TaskPipelines.Domain.Exceptions
         {
         }
 
-        public static ResourceNotFoundException FromEntity<T>(long id)
+        public static ResourceNotFoundException FromEntity<T>(string id)
         {
             return new ResourceNotFoundException($"Cannot find entity of type {typeof(T).Name} with id:{id}");
         }

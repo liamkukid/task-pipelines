@@ -22,10 +22,10 @@ namespace TaskPipelines.Controllers
         public Task<IReadOnlyCollection<Pipeline>> AllAsync() => _service.AllAsync();
 
         [HttpGet("{id}")]
-        public Task<PipelineResponse> GetAsync([FromQuery] long id) => _service.GetAsync(id);
+        public Task<PipelineResponse> GetAsync(string id) => _service.GetAsync(id);
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync([FromQuery] long id)
+        public async Task<IActionResult> DeleteAsync(string id)
         {
             await _service.DeleteAsync(id);
             return Ok();

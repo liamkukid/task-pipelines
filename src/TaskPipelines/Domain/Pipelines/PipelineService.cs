@@ -20,7 +20,7 @@ namespace TaskPipelines.Domain.Pipelines
             return await _context.Pipelines.Find(_ => true).ToListAsync();
         }
 
-        public async Task<PipelineResponse> GetAsync(long id)
+        public async Task<PipelineResponse> GetAsync(string id)
         {
             var pipeline = await _context.Pipelines.ByIdOrNullAsync(id)
                            ?? throw ResourceNotFoundException.FromEntity<Pipeline>(id);
@@ -32,7 +32,7 @@ namespace TaskPipelines.Domain.Pipelines
             return new PipelineResponse(pipeline, tasks);
         }
 
-        public async Task DeleteAsync(long id)
+        public async Task DeleteAsync(string id)
         {
             var tasksDeletion = await _context.Tasks.DeleteManyAsync(x => x.PipelineId == id);
             var pipelineDeletion = await _context.Pipelines.DeleteOneAsync(x => x.Id == id);

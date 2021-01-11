@@ -29,15 +29,15 @@ namespace TaskPipelines.Domain.ExecutableTasks
 
         public int Duration { get; set; }
 
-        public int? PreviousTaskId { get; set; }
+        public string PreviousTaskId { get; set; }
 
-        public int? PipelineId { get; set; }
+        public string PipelineId { get; set; }
 
         public void AttachTo(Pipeline pipeline)
         {
             pipeline.ThrowIfNull(nameof(pipeline));
 
-            if (PipelineId.HasValue)
+            if (PipelineId != null)
             {
                 throw new InvalidOperationException($"The task id{Id} is attached to another pipeline");
             }

@@ -15,7 +15,7 @@ namespace TaskPipelines.Domain
             }
         }
 
-        public static Task<T> ByIdOrNullAsync<T>(this IMongoCollection<T> set, long id)
+        public static Task<T> ByIdOrNullAsync<T>(this IMongoCollection<T> set, string id)
             where T : BaseModel
         {
             return set.Find(x => x.Id == id).FirstOrDefaultAsync();
