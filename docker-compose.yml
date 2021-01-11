@@ -1,0 +1,57 @@
+version: "3.4"
+
+networks:
+  tp-network:
+    driver: bridge
+
+services:
+
+  mongo:
+    container_name: tp-mongo
+    image: mongo:latest
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: tasks
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - 27017:27017
+    networks:
+      - tp-network
+
+  mongo-express:
+    image: mongo-express
+    container_name: tp-mongo-express
+    restart: unless-stopped
+    ports:
+      - 27019:8081
+    depends_on:
+      - mongo
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+    networks:
+      - tp-network
+
+  backend:
+    container_name: tp-backend
+    image: tp/backend
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    build:
+      context: ./src
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_Kestrel__Certificates__Default__Password: password
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://+:44338
+      ASPNETCORE_HTTPS_PORT: 44338
+      ConnectionStrings:DefaultConnection: Host=database.api;Database=core;User Id=dbUser;Password=Str0ngPass!
+    ports:
+      - 44338:44338
+    networks:
+      - tp-network
+    volumes:
+      - ~/.aspnet/https:/https:ro
