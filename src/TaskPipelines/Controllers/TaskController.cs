@@ -44,6 +44,30 @@ namespace TaskPipelines.Controllers
                 ?? throw ResourceNotFoundException.FromEntity<ExecutableTask>(id);
         }
 
+        [HttpPost("")]
+        public async Task<IActionResult> CreateAsync(ExecutableTaskCreateRequest request)
+        {
+            ExecutableTask task;
+            if (request.PreviousTaskId != null)
+            {
+                var previousTask = await _context.Tasks.ByIdOrNullAsync(request.PreviousTaskId);
+                task = new ExecutableTask(request.Name, previousTask);
+                
+            }
+            else if (request.PipelineId != null)
+            {
+                var pipeline = await _context.Pipelines.ByIdOrNullAsync(request.PipelineId);
+                task = new ExecutableTask(request.Name, pipeline);
+            }
+            else
+            {
+                return new BadRequestResult();
+            }
+
+            await _context.Tasks.InsertOneAsync(task);
+            return Ok(task.Id);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(string id)
         {

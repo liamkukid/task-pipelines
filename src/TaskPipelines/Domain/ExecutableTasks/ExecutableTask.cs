@@ -25,6 +25,17 @@ namespace TaskPipelines.Domain.ExecutableTasks
             }
         }
 
+        public ExecutableTask(string name, Pipeline pipeline)
+        {
+            name.ThrowIfNull(nameof(name));
+            pipeline.ThrowIfNull(nameof(pipeline));
+            Name = name;
+
+            CreatedAt = UpdatedAt = DateTime.Now;
+            Duration = new Random().Next(3000);
+            PipelineId = pipeline.Id;
+        }
+
         public string Name { get; set; }
 
         public int Duration { get; set; }

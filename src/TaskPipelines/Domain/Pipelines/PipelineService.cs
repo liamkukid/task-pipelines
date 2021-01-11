@@ -32,6 +32,13 @@ namespace TaskPipelines.Domain.Pipelines
             return new PipelineResponse(pipeline, tasks);
         }
 
+        public async Task<string> CreateAsync()
+        {
+            var pipeline = new Pipeline();
+            await _context.Pipelines.InsertOneAsync(pipeline);
+            return pipeline.Id;
+        }
+
         public async Task DeleteAsync(string id)
         {
             var tasksDeletion = await _context.Tasks.DeleteManyAsync(x => x.PipelineId == id);
