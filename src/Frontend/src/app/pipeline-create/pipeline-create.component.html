@@ -3,21 +3,29 @@
   <div class="">
     <div><span>Id: </span><b>{{ pipeline.pipeline.id }}</b></div>
     <div><span>Full duration: </span><b>{{ pipeline.duration }}ms</b></div>
+    <div><span>Started: </span><b>{{ pipeline.pipeline.startedAt }}</b></div>
+    <div><span>Finished: </span><b>{{ pipeline.pipeline.finishedAt }}</b></div>
   </div>
 
-  <ul>
-    <li *ngFor="let task of pipeline.tasks">
-      <div>
-        <span>Id: </span><b>{{ task.id }}</b>
-      </div>
-      <div>
-        <span>Name: </span><b>{{ task.name }}</b>
-      </div>
-      <div>
-        <span>Duration: </span><b>{{ task.duration }}ms</b>
-      </div>
-    </li>
-  </ul>
+  <div class="mt-1">
+    <button class="btn btn-secondary" (click)="start()">Start</button>
+  </div>
+
+  <div class="mt-3">
+    <ul>
+      <li *ngFor="let task of pipeline.tasks">
+        <div>
+          <span>Id: </span><b>{{ task.id }}</b>
+        </div>
+        <div>
+          <span>Name: </span><b>{{ task.name }}</b>
+        </div>
+        <div>
+          <span>Duration: </span><b>{{ task.duration }}ms</b>
+        </div>
+      </li>
+    </ul>
+  </div>
 
   <div class="mt-3">
     <button class="btn btn-primary" (click)="addTask()">Add task</button>

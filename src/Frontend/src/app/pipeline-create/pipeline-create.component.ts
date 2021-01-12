@@ -23,6 +23,16 @@ export class PipelineCreateComponent implements OnInit {
     });
   }
 
+  start(): void {
+    if (this.pipeline.tasks.length > 0) {
+      this.pipelines.start(this.pipeline.pipeline.id).subscribe(() => {
+        console.log('started');
+      });
+    } else {
+      console.log('No tasks to start');
+    }
+  }
+
   addTask(): void {
     const name = Date.now().toString();
     const request = { name: name, pipelineId: null, previousTaskId: null } as ExecutableTask;

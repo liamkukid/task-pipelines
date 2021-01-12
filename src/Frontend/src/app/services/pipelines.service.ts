@@ -26,4 +26,8 @@ export class PipelinesService {
     delete(id: number): Observable<void> {
         return this.api.delete<void>(this.url + '/' + id);
     }
+
+    start(id: number): Observable<void> {
+        return this.api.get<void>(`${this.url}/${id}/start`);
+    }
 }

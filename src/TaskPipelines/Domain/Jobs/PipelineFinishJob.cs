@@ -24,7 +24,7 @@ namespace TaskPipelines.Domain.Jobs
 
             foreach (PipelineResponse pipelineResponse in pipelines)
             {
-                pipelineResponse.Pipeline.Finish();
+                await _service.FinishAsync(pipelineResponse.Pipeline);
             }
         }
     }

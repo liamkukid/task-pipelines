@@ -92,7 +92,18 @@ namespace TaskPipelines.Domain.Pipelines
                 throw new InvalidOperationException();
             }
 
-            pipeline.Pipeline.Start();
+            var filter = Builders<Pipeline>.Filter.Eq(nameof(Pipeline.Id), id);
+            var update = Builders<Pipeline>.Update.Set(nameof(Pipeline.StartedAt), DateTime.Now);
+
+            await _context.Pipelines.UpdateOneAsync(filter, update);
+        }
+
+        public async Task FinishAsync(Pipeline pipeline)
+        {
+            var filter = Builders<Pipeline>.Filter.Eq(nameof(Pipeline.Id), pipeline.Id);
+            var update = Builders<Pipeline>.Update.Set(nameof(Pipeline.FinishedAt), DateTime.Now);
+
+            await _context.Pipelines.UpdateOneAsync(filter, update);
         }
     }
 }
