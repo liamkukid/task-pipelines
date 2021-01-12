@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ExecutableTask } from '../models/executable-task';
 import { Pipeline } from '../models/pipeline';
+import { PipelineResponse } from '../models/pipeline-response';
+import { ExecutableTasksService } from '../services/executable-tasks.service';
 import { PipelinesService } from '../services/pipelines.service';
 
 @Component({
@@ -7,11 +10,23 @@ import { PipelinesService } from '../services/pipelines.service';
   templateUrl: './pipeline-create.component.html'
 })
 export class PipelineCreateComponent implements OnInit {
-  constructor(private readonly api: PipelinesService) {}
+
+  pipeline: PipelineResponse;
+
+  constructor(
+    private readonly pipelines: PipelinesService,
+    private readonly tasks: ExecutableTasksService) {}
 
   ngOnInit(): void {
-    this.api.all().subscribe(x => {
-      console.log(x);
+    this.pipelines.all().subscribe(x => {
+      this.pipeline = x[0];
+    });
+  }
+
+  addTask(): void {
+    const name = Date.now().toString();
+    this.tasks.create({ name: name, pipelineId: null, previousTaskId: null } as ExecutableTask).subscribe(() => {
+      this.ngOnInit();
     });
   }
 }

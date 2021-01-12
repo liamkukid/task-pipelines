@@ -45,7 +45,7 @@ namespace TaskPipelines.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> CreateAsync(ExecutableTaskCreateRequest request)
+        public async Task<IActionResult> CreateAsync([FromBody] ExecutableTaskCreateRequest request)
         {
             ExecutableTask task;
             if (request.PreviousTaskId != null)

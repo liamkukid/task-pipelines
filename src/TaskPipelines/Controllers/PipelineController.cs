@@ -19,7 +19,7 @@ namespace TaskPipelines.Controllers
         }
 
         [HttpGet("")]
-        public Task<IReadOnlyCollection<Pipeline>> AllAsync() => _service.AllAsync();
+        public Task<IReadOnlyCollection<PipelineResponse>> AllAsync() => _service.AllAsync();
 
         [HttpPost("")]
         public async Task<IActionResult> CreateAsync()

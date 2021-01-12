@@ -29,19 +29,19 @@ export class ApiService {
     this.apiUrl = environment.resourceApiURI;
   }
 
-  get<T>(url: string, options?: HttpOptions): Observable<T> {
-    return this.http.get<T>(this.apiUrl + url, options);
+  get<T>(url: string): Observable<T> {
+    return this.http.get<T>(this.apiUrl + url, applicationsJsonHttpOptions);
   }
 
-  post<T>(url: string, body?: any, options?: HttpOptions): Observable<T> {
-    return this.http.post<T>(this.apiUrl + url, body, options);
+  post<T>(url: string, body?: any): Observable<T> {
+    return this.http.post<T>(this.apiUrl + url, body, applicationsJsonHttpOptions);
   }
 
-  put<T>(url: string, body: any, options?: HttpOptions): Observable<T> {
-    return this.http.put<T>(this.apiUrl + url, body, options);
+  put<T>(url: string, body: any): Observable<T> {
+    return this.http.put<T>(this.apiUrl + url, body, applicationsJsonHttpOptions);
   }
 
-  delete<T>(url: string, options?: HttpOptions): Observable<T> {
-    return this.http.delete<T>(this.apiUrl + url, options);
+  delete<T>(url: string): Observable<T> {
+    return this.http.delete<T>(this.apiUrl + url, applicationsJsonHttpOptions);
   }
 }

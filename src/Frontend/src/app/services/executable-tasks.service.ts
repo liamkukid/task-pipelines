@@ -7,7 +7,7 @@ import { ApiService } from "./api.service";
     providedIn: 'root'
 })
 export class ExecutableTasksService {
-    private readonly url = '/api/executable-tasks'
+    private readonly url = '/api/tasks'
     constructor(private readonly api: ApiService) {}
 
     all(): Observable<Array<ExecutableTask>> {

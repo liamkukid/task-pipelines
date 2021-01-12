@@ -15,9 +15,25 @@ namespace TaskPipelines.Domain.Pipelines
             _context = context;
         }
 
-        public async Task<IReadOnlyCollection<Pipeline>> AllAsync()
+        public async Task<IReadOnlyCollection<PipelineResponse>> AllAsync()
         {
-            return await _context.Pipelines.Find(_ => true).ToListAsync();
+            var pipelines = await _context.Pipelines.Find(_ => true).ToListAsync();
+
+            var result = new List<PipelineResponse>();
+
+            foreach (Pipeline pipeline in pipelines)
+            {
+                var tasks = await (await _context.Tasks
+                        .FindAsync(x => x.PipelineId == pipeline.Id))
+                    .ToListAsync();
+
+                result.Add(
+                    new PipelineResponse(
+                        pipeline: pipeline,
+                        tasks: tasks));
+            }
+
+            return result;
         }
 
         public async Task<PipelineResponse> GetAsync(string id)

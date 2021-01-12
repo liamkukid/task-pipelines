@@ -7,8 +7,8 @@ namespace TaskPipelines.Domain.ExecutableTasks
         [Required]
         public string Name { get; set; }
 
-        public string PreviousTaskId { get; set; }
+        public string? PreviousTaskId { get; set; }
 
-        public string PipelineId { get; set; }
+        public string? PipelineId { get; set; }
     }
 }
