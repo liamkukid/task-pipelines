@@ -30,6 +30,9 @@ namespace TaskPipelines.Controllers
         [HttpGet("{id}")]
         public Task<PipelineResponse> GetAsync(string id) => _service.GetAsync(id);
 
+        [HttpGet("{id}/start")]
+        public Task StartAsync(string id) => _service.StartAsync(id);
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(string id)
         {

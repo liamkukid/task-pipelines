@@ -9,5 +9,43 @@ namespace TaskPipelines.Domain.Pipelines
         {
             CreatedAt = UpdatedAt = DateTime.Now;
         }
+
+        public bool Launched => StartedAt.HasValue;
+
+        public bool Finished => FinishedAt.HasValue;
+
+        public DateTime? StartedAt { get; protected set; }
+
+        public DateTime? FinishedAt { get; protected set; }
+
+        public void Start()
+        {
+            if (Launched || Finished)
+            {
+                throw new InvalidOperationException();
+            }
+
+            StartedAt = DateTime.Now;
+        }
+
+        public void Finish()
+        {
+            if (!Launched || Finished)
+            {
+                throw new InvalidOperationException();
+            }
+
+            FinishedAt = DateTime.Now;
+        }
+
+        public bool CouldBeFinished()
+        {
+            if (Launched || Finished)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return DateTime.Now >= StartedAt;
+        }
     }
 }

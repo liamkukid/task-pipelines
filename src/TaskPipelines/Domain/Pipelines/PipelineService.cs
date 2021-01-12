@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using TaskPipelines.Domain.DataAccess;
@@ -15,25 +17,45 @@ namespace TaskPipelines.Domain.Pipelines
             _context = context;
         }
 
-        public async Task<IReadOnlyCollection<PipelineResponse>> AllAsync()
+        public async Task<IReadOnlyCollection<PipelineResponse>> StartedPipelinesAsync()
         {
-            var pipelines = await _context.Pipelines.Find(_ => true).ToListAsync();
+            var pipelines = await _context.Pipelines
+                .Find(x => x.FinishedAt == null && x.StartedAt != null)
+                .ToListAsync();
 
             var result = new List<PipelineResponse>();
 
             foreach (Pipeline pipeline in pipelines)
             {
-                var tasks = await (await _context.Tasks
-                        .FindAsync(x => x.PipelineId == pipeline.Id))
-                    .ToListAsync();
-
-                result.Add(
-                    new PipelineResponse(
-                        pipeline: pipeline,
-                        tasks: tasks));
+                result.Add(await FindTasksForPipelineAsync(pipeline));
             }
 
             return result;
+        }
+
+        public async Task<IReadOnlyCollection<PipelineResponse>> AllAsync()
+        {
+            List<Pipeline> pipelines = await _context.Pipelines.Find(_ => true).ToListAsync();
+
+            var result = new List<PipelineResponse>();
+
+            foreach (Pipeline pipeline in pipelines)
+            {
+                result.Add(await FindTasksForPipelineAsync(pipeline));
+            }
+
+            return result;
+        }
+
+        private async Task<PipelineResponse> FindTasksForPipelineAsync(Pipeline pipeline)
+        {
+            var tasks = await (await _context.Tasks
+                    .FindAsync(x => x.PipelineId == pipeline.Id))
+                .ToListAsync();
+
+            return new PipelineResponse(
+                pipeline: pipeline,
+                tasks: tasks);
         }
 
         public async Task<PipelineResponse> GetAsync(string id)
@@ -59,6 +81,18 @@ namespace TaskPipelines.Domain.Pipelines
         {
             var tasksDeletion = await _context.Tasks.DeleteManyAsync(x => x.PipelineId == id);
             var pipelineDeletion = await _context.Pipelines.DeleteOneAsync(x => x.Id == id);
+        }
+
+        public async Task StartAsync(string id)
+        {
+            PipelineResponse pipeline = await GetAsync(id);
+
+            if (!pipeline.Tasks.Any())
+            {
+                throw new InvalidOperationException();
+            }
+
+            pipeline.Pipeline.Start();
         }
     }
 }
