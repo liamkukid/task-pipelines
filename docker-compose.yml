@@ -39,7 +39,7 @@ services:
     depends_on:
       - mongo
     build:
-      context: ./src/TaskPipelines
+      context: ./src
       dockerfile: Dockerfile
     environment:
       ASPNETCORE_Kestrel__Certificates__Default__Password: password
@@ -64,6 +64,6 @@ services:
       context: ./src/Frontend
       dockerfile: Dockerfile
     ports:
-      - 8080:80
+      - 4200:80
     networks:
       - tp-network
