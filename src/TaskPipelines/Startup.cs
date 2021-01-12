@@ -12,6 +12,8 @@ namespace TaskPipelines
 {
     public class Startup
     {
+        private const string CorsPolicyName = "Cors";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -33,12 +35,20 @@ namespace TaskPipelines
                 .AddScoped<MongoContext>()
                 .AddScoped<PipelineService>();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(CorsPolicyName, builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, MongoContext context)
         {
             if (env.IsDevelopment())
             {
@@ -51,6 +61,7 @@ namespace TaskPipelines
                 app.UseHsts();
             }
 
+            app.UseCors(CorsPolicyName);
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             if (!env.IsDevelopment())
@@ -77,6 +88,8 @@ namespace TaskPipelines
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
+
+            Seeding.AddPipelines(context);
         }
     }
 }
