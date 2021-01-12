@@ -1,41 +1,60 @@
-<div *ngIf="pipeline == null; else pipelineExists">
-  <div class="btn btn-primary" (click)="createPipeline()">Create pipeline</div>
+<div class="row">
+  <div class="col-4">
+    <div>What should you do:</div>
+    <ol>
+      <li>Create pipeline</li>
+      <li>Add a couple of tasks</li>
+      <li>Click on the Start button</li>
+      <li>Wait for the finish</li>
+      <li>Delete the task</li>
+      <li>...</li>
+      <li>Repeat</li>
+    </ol>
+  </div>
+
+  <div class="col-8">
+    <div class="mt-3" *ngIf="pipeline == null; else pipelineExists">
+      <div class="btn btn-primary" (click)="createPipeline()">Create pipeline</div>
+    </div>
+    
+    <ng-template #pipelineExists>
+      <div class="" >
+        <div class="">
+          <div><span>Id: </span><b>{{ pipeline.pipeline.id }}</b></div>
+          <div><span>Full duration: </span><b>{{ pipeline.duration }}ms</b></div>
+          <div><span>Started: </span><b>{{ pipeline.pipeline.startedAt }}</b></div>
+          <div><span>Finished: </span><b>{{ pipeline.pipeline.finishedAt }}</b></div>
+        </div>
+      
+        <div class="mt-1">
+          <button class="btn btn-primary" (click)="startPipeline()" [disabled]="!showStartButton">Start</button>
+          <button class="btn btn-outline-danger ml-3" (click)="deletePipeline()"[disabled]="!showDeletetButton">Delete</button>
+        </div>
+      
+        <div class="mt-3">
+          <ul>
+            <li *ngFor="let task of pipeline.tasks">
+              <div>
+                <span>Id: </span><b>{{ task.id }}</b>
+              </div>
+              <div>
+                <span>Name: </span><b>{{ task.name }}</b>
+              </div>
+              <div>
+                <span>Duration: </span><b>{{ task.duration }}ms</b>
+              </div>
+            </li>
+          </ul>
+        </div>
+      
+        <div class="mt-3">
+          <button class="btn btn-primary" (click)="addTask()">Add task</button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
 </div>
 
-<ng-template #pipelineExists>
-  <div class="" >
-    <div class="">
-      <div><span>Id: </span><b>{{ pipeline.pipeline.id }}</b></div>
-      <div><span>Full duration: </span><b>{{ pipeline.duration }}ms</b></div>
-      <div><span>Started: </span><b>{{ pipeline.pipeline.startedAt }}</b></div>
-      <div><span>Finished: </span><b>{{ pipeline.pipeline.finishedAt }}</b></div>
-    </div>
-  
-    <div class="mt-1">
-      <button class="btn btn-secondary" (click)="startPipeline()">Start</button>
-      <button class="btn btn-secondary ml-3" (click)="deletePipeline()">Delete</button>
-    </div>
-  
-    <div class="mt-3">
-      <ul>
-        <li *ngFor="let task of pipeline.tasks">
-          <div>
-            <span>Id: </span><b>{{ task.id }}</b>
-          </div>
-          <div>
-            <span>Name: </span><b>{{ task.name }}</b>
-          </div>
-          <div>
-            <span>Duration: </span><b>{{ task.duration }}ms</b>
-          </div>
-        </li>
-      </ul>
-    </div>
-  
-    <div class="mt-3">
-      <button class="btn btn-primary" (click)="addTask()">Add task</button>
-    </div>
-  </div>
-</ng-template>
+
 
 

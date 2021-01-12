@@ -13,6 +13,17 @@ export class PipelineCreateComponent implements OnInit {
 
   pipeline: PipelineResponse;
 
+  get showStartButton(): boolean {
+    return this.pipeline != null &&
+           this.pipeline.tasks.length > 0 &&
+           this.pipeline.pipeline.startedAt == null;
+  }
+
+  get showDeletetButton(): boolean {
+    return this.pipeline != null &&
+           this.pipeline.pipeline.finishedAt != null;
+  }
+
   private intervalId: any | null = null;
 
   constructor(
