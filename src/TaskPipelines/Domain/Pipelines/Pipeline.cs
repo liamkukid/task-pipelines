@@ -17,15 +17,5 @@ namespace TaskPipelines.Domain.Pipelines
         public DateTime? StartedAt { get; protected set; }
 
         public DateTime? FinishedAt { get; protected set; }
-
-        public bool CouldBeFinished()
-        {
-            if (!Launched || Finished)
-            {
-                throw new InvalidOperationException();
-            }
-
-            return DateTime.Now >= StartedAt;
-        }
     }
 }

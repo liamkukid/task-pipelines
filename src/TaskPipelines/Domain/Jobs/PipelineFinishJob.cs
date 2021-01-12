@@ -19,7 +19,7 @@ namespace TaskPipelines.Domain.Jobs
         protected override async Task InvokeAsync()
         {
             var pipelines = (await _service.StartedPipelinesAsync())
-                .Where(x => x.Pipeline.CouldBeFinished())
+                .Where(x => x.CouldBeFinished())
                 .ToArray();
 
             foreach (PipelineResponse pipelineResponse in pipelines)
