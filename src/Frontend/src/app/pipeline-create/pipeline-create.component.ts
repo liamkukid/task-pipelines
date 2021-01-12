@@ -19,11 +19,39 @@ export class PipelineCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.pipelines.all().subscribe(x => {
-      this.pipeline = x[0];
+
+      if (x.length > 0) {
+        this.pipeline = x[0];
+      } else {
+        this.pipeline = null;
+      }
+      
     });
   }
 
-  start(): void {
+  createPipeline(): void {
+    if (this.pipeline != null) {
+      throw Error('There is a created pipeline');
+    }
+
+    this.pipelines.create().subscribe((resp) => {
+      this.pipelines.get(resp.id).subscribe(x => {
+        this.pipeline = x;
+      });
+    });
+  }
+
+  deletePipeline(): void {
+    if (this.pipeline == null) {
+      throw Error('There is no created pipelines');
+    }
+
+    this.pipelines.delete(this.pipeline.pipeline.id).subscribe(() => {
+      this.ngOnInit();
+    });
+  }
+
+  startPipeline(): void {
     if (this.pipeline.tasks.length > 0) {
       this.pipelines.start(this.pipeline.pipeline.id).subscribe(() => {
         console.log('started');

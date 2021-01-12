@@ -15,12 +15,12 @@ export class PipelinesService {
         return this.api.get<Array<PipelineResponse>>(this.url);
     }
 
-    get(id: number): Observable<Pipeline> {
-        return this.api.get<Pipeline>(this.url + '/' + id);
+    get(id: string): Observable<PipelineResponse> {
+        return this.api.get<PipelineResponse>(this.url + '/' + id);
     }
 
-    create(pipeline: Pipeline): Observable<void> {
-        return this.api.post<void>(this.url, pipeline);
+    create(): Observable<{id: string}> {
+        return this.api.post<{id: string}>(this.url);
     }
 
     delete(id: number): Observable<void> {

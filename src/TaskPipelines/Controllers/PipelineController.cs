@@ -24,7 +24,10 @@ namespace TaskPipelines.Controllers
         [HttpPost("")]
         public async Task<IActionResult> CreateAsync()
         {
-            return Ok(await _service.CreateAsync());
+            return Ok(new
+            {
+                id = await _service.CreateAsync()
+            });
         }
 
         [HttpGet("{id}")]
