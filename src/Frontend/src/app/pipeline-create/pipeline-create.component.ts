@@ -25,7 +25,15 @@ export class PipelineCreateComponent implements OnInit {
 
   addTask(): void {
     const name = Date.now().toString();
-    this.tasks.create({ name: name, pipelineId: null, previousTaskId: null } as ExecutableTask).subscribe(() => {
+    const request = { name: name, pipelineId: null, previousTaskId: null } as ExecutableTask;
+    if (this.pipeline.tasks.length == 0) {
+      request.pipelineId = this.pipeline.pipeline.id;
+    } else {
+      const lastTask = this.pipeline.tasks[this.pipeline.tasks.length - 1];
+      request.previousTaskId = lastTask.id;
+    }
+
+    this.tasks.create(request).subscribe(() => {
       this.ngOnInit();
     });
   }

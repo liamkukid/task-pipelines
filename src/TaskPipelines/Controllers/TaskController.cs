@@ -65,7 +65,10 @@ namespace TaskPipelines.Controllers
             }
 
             await _context.Tasks.InsertOneAsync(task);
-            return Ok(task.Id);
+            return Ok(new
+            {
+                taskId = task.Id
+            });
         }
 
         [HttpDelete("{id}")]
