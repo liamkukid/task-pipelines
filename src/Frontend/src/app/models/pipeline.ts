@@ -1,5 +1,5 @@
 export interface Pipeline {
-    id: number;
+    id: string;
     createdAt: Date;
     updatedAt: Date;
 

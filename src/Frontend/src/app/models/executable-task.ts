@@ -1,9 +1,9 @@
 export interface ExecutableTask {
-    id: number;
+    id: string;
     name: string;
     duration: number;
-    previousTaskId: number;
-    pipelineId: number;
+    previousTaskId: string;
+    pipelineId: string;
     createdAt: Date;
     updatedAt: Date;
 }

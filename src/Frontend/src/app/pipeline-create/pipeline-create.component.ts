@@ -13,6 +13,8 @@ export class PipelineCreateComponent implements OnInit {
 
   pipeline: PipelineResponse;
 
+  private intervalId: any | null = null;
+
   constructor(
     private readonly pipelines: PipelinesService,
     private readonly tasks: ExecutableTasksService) {}
@@ -35,9 +37,13 @@ export class PipelineCreateComponent implements OnInit {
     }
 
     this.pipelines.create().subscribe((resp) => {
-      this.pipelines.get(resp.id).subscribe(x => {
-        this.pipeline = x;
-      });
+      this.getPipeline(resp.id);
+    });
+  }
+
+  private getPipeline(id: string): void {
+    this.pipelines.get(id).subscribe(x => {
+      this.pipeline = x;
     });
   }
 
@@ -55,6 +61,16 @@ export class PipelineCreateComponent implements OnInit {
     if (this.pipeline.tasks.length > 0) {
       this.pipelines.start(this.pipeline.pipeline.id).subscribe(() => {
         console.log('started');
+        const id = this.pipeline.pipeline.id;
+        this.intervalId = setInterval(() => {
+          this.pipelines.get(id).subscribe(x => {
+            this.pipeline = x;
+
+            if (this.pipeline.pipeline.finishedAt != null) {
+              clearInterval(this.intervalId);
+            }
+          });
+        }, 200);
       });
     } else {
       console.log('No tasks to start');
