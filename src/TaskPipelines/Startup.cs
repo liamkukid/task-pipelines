@@ -84,6 +84,7 @@ namespace TaskPipelines
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
                 spa.Options.SourcePath = "ClientApp";
+                spa.Options.DevServerPort = 4200;
 
                 if (env.IsDevelopment())
                 {
