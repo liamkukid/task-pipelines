@@ -5,7 +5,6 @@ networks:
     driver: bridge
 
 services:
-
   mongo:
     container_name: tp-mongo
     image: mongo:latest
@@ -40,18 +39,31 @@ services:
     depends_on:
       - mongo
     build:
-      context: ./src
+      context: ./src/TaskPipelines
       dockerfile: Dockerfile
     environment:
       ASPNETCORE_Kestrel__Certificates__Default__Password: password
       ASPNETCORE_Kestrel__Certificates__Default__Path: /https/aspnetapp.pfx
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: https://+:44338
-      ASPNETCORE_HTTPS_PORT: 44338
-      ConnectionStrings:DefaultConnection: Host=database.api;Database=core;User Id=dbUser;Password=Str0ngPass!
+      ASPNETCORE_URLS: https://+:5001
+      ASPNETCORE_HTTPS_PORT: 5001
+      ConnectionStrings:Mongo: mongodb://admin:admin@mongo:27017
     ports:
-      - 44338:44338
+      - 5001:5001
     networks:
       - tp-network
     volumes:
       - ~/.aspnet/https:/https:ro
+  
+  frontend:
+    container_name: tp-frontend
+    image: tp/frontend
+    depends_on:
+      - backend
+    build:
+      context: ./src/Frontend
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    networks:
+      - tp-network
